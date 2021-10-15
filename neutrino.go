@@ -320,7 +320,8 @@ func (sp *ServerPeer) OnAddr(_ *peer.Peer, msg *wire.MsgAddr) {
 	// helps prevent the network from becoming another public test network
 	// since it will not be able to learn about other peers that have not
 	// specifically been provided.
-	if sp.server.chainParams.Net == chaincfg.SimNetParams.Net {
+	if sp.server.chainParams.Net == chaincfg.SimNetParams.Net ||
+		sp.server.chainParams.Net == chaincfg.RegressionNetParams.Net {
 		return
 	}
 
@@ -746,7 +747,8 @@ func NewChainService(cfg Config) (*ChainService, error) {
 	// peers and actively avoid advertising and connecting to discovered
 	// peers in order to prevent it from becoming a public test network.
 	var newAddressFunc func() (net.Addr, error)
-	if s.chainParams.Net != chaincfg.SimNetParams.Net {
+	if s.chainParams.Net != chaincfg.SimNetParams.Net &&
+		s.chainParams.Net != chaincfg.RegressionNetParams.Net {
 		newAddressFunc = func() (net.Addr, error) {
 
 			// Gather our set of currently connected peers to avoid
@@ -1263,7 +1265,8 @@ func (s *ChainService) handleAddPeerMsg(state *peerState, sp *ServerPeer) bool {
 	// the simulation test network since it is only intended to connect to
 	// specified peers and actively avoids advertising and connecting to
 	// discovered peers.
-	if s.chainParams.Net != chaincfg.SimNetParams.Net {
+	if s.chainParams.Net != chaincfg.SimNetParams.Net &&
+		s.chainParams.Net != chaincfg.RegressionNetParams.Net {
 		// Request known addresses if the server address manager needs
 		// more and the peer has a protocol version new enough to
 		// include a timestamp with addresses.
