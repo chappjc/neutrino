@@ -1560,6 +1560,7 @@ func (s *ChainService) Stop() error {
 
 	var returnErr error
 	s.connManager.Stop()
+	s.connManager.Wait()
 	s.broadcaster.Stop()
 	if err := s.utxoScanner.Stop(); err != nil {
 		log.Errorf("error stopping utxo scanner: %v", err)
